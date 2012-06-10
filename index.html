@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>myTuTu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="stupid simple GTD HTML5 app">
+    <meta name="author" content="elfixit">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 30px; /* 30px make some space on the top... */
+      }
+    </style>
+    <link href="css/jquery-ui-1.8.16.custom.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet"><!-- dont wan't that.. ;-) -->
+    <link href="css/tudus.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5.js"></script>
+      <link href="css/jquery.ui.1.8.16.ie.css" rel="stylesheet">
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container todo-container">
+      <div class="row-fluid">
+        <div class="span1"></div>
+        <div id="todoapp" class="span10">
+          <!-- just here to do what needs to be done.. -->
+          <header class="row-fluid">
+            <div class="span10">
+              <!-- give me a better name.. -->
+              <h1>my TuTu..</h1>
+              <p>A simple primitiv GTD HTML5 App - with fisherprice design</p><!-- finde the mistak -->
+            </div>
+            <!-- because it is needed.. -->
+            <nav class="span2">
+              <ul class="nav nav-list">
+                <li><a id="nav_about" href="#about" data-toggle="modal"><i class="icon-info-sign"></i>About</a></li>
+                <li><a id="nav_contact" href="#contact"  data-toggle="modal"><i class="icon-envelope"></i>Contact</a></li>
+              </ul>
+            </nav>
+          </header>
+
+          <!-- where the magic starts .. -->
+          <section class="row-fluid" id="todoform">
+            <header>
+              <h2><i class="icon-plus"></i>&nbsp;Add one..</h2>
+            </header>
+            <div class="form-inline">
+              <input type="hidden" name="prio" id="new-prio" value="2">
+              <div id="new-prio-btn" class="btn-group span2">
+                <button class="btn btn-danger prio-btn new-prio-btn" value="1">!!!</button>
+                <button class="btn btn-warning prio-btn disabled new-prio-btn" value="2">!!</button>
+                <button class="btn btn-info prio-btn new-prio-btn" value="3">!</button>
+              </div>
+              <span class="span5">
+              <input type="text" id="new-title" class="input" placeholder="Task description">
+              </span>
+              <span class="span2">
+              <input type="text" id="new-date" class="datepicker input">
+              </span>
+              <span class="span2">
+              <a id="new-add" class="btn btn-success"><i class="icon-plus icon-white"></i>&nbsp;Add Task</a>
+              </span>
+            </div>
+          </section>
+
+          <section class="row-fluid" id="todolist">
+            <header>
+              <!-- some stupid header shit -->
+              <h2><i class="icon-list"></i>&nbsp;ToDo's</h2>
+            </header>
+            <!--# the magic list of tutus..-->
+            <ul class="span12" id="todo-list">
+
+            </ul>
+          </section>
+
+          <footer class="row-fluid">
+
+          </footer>
+        </div>
+      </div>
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.7.2.js"></script>
+    <script src="js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/underscore-1.3.1.js"></script>
+    <script src="js/backbone.js"></script>
+    <script src="js/backbone-localstorage.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/tudus.js"></script>
+    <script src="js/tudus-app.js"></script>
+
+    <!-- start templates -->
+    <!-- how stupid can someone be to implement erb like template system in javascript.. fuck you!! stupid rails communtiy ;-) -->
+    <script type="text/template" id="item-template">
+      <div class="row-fluid">
+      <div class="span12 view alert <%= prio == '1' ? 'alert-danger' : 'alert-warning' %> <%= prio == '3' ? 'alert-info' : '' %> <%= done ? 'done' : '' %>">
+        <div class="span8 static">
+        <label><%= title %></label>
+        </div>
+        <div class="span2 static">
+          <label><%= date %></label>
+        </div>
+        <div class="span2 btn-group static">
+            <a class="btn btn-success toggle"><i class="icon-ok icon-white"></i></a>
+            <a class="btn btn-warning btn-edit"><i class="icon-edit icon-white"></i></a>
+            <a class="btn btn-danger destroy"><i class="icon-remove icon-white"></i></a>
+        </div>
+        <input type="hidden" name="prio" class="edit prio edit-prio" value="<%= prio %>">
+        <div class="edit btn-group span2">
+          <button class="btn btn-danger prio-btn" value="1">!!!</button>
+          <button class="btn btn-warning prio-btn disabled" value="2">!!</button>
+          <button class="btn btn-info prio-btn" value="3">!</button>
+        </div>
+        <span class="edit span6">
+          <input class="edit edit-title input" type="text" value="<%= title %>">
+        </span><span class="edit span2">
+          <input type="text" class="edit date datepicker edit-date input" value="<%= date %>">
+        </span><span class="edit span1">
+          <a class="btn btn-success btn-editok"><i class="icon-ok icon-white"></i></a>
+        </span>
+      </div>
+      </div>
+    </script>
+
+    <!-- how stupid can someone be to implement erb like template system in javascript.. fuck you!! stupid rails communtiy ;-) -->
+    <script type="text/template" id="stats-template">
+      <% if (done) { %>
+        <a class="btn btn-danger" id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+      <% } %>
+      <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+    </script>
+    <!-- end templates -->
+
+    <!-- start modal dialogs.. -->
+    <div class="modal hide" id="about">
+      <header class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>About</h3>
+      </header>
+      <article class="modal-body">
+        <p>Another stupid school projekt.. <br/>
+        This time used for self education(learning <a target="_blank" href="http://backbonejs.com">backbone.js</a> - you need to like it).<br />
+        It is a rewrite based on a fork of the <a target="_blank" href="http://backbonejs.org/examples/todos/index.html">backbone.js example todo app</a>. changes:</p>
+        <ul>
+          <li>new created index.html completely new written..</li>
+          <li>add bootstrap for the css framework.</li>
+          <li>add jquery-ui with bootstrap theme.</li>
+          <li>big change in tudus-app.js:
+            <ul>
+              <li>complete new Model</li>
+              <li>new Order based on date and priority</li>
+              <li>edit throw buttons</li>
+              <li>edit throw dblclick</li>
+              <li>change title throw dblclick and enter</li>
+              <li>same ui base setup (ToDoView, AppView)</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+      <footer class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+      </footer>
+    </div>
+
+    <div class="modal hide" id="contact">
+      <header class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>Contact:</h3>
+      </header>
+      <article class="modal-body">
+       <p>Nothing to say hear.. hrr hrr<br>
+       admins __at__ lists xiala net
+       </p>
+      </article>
+      <footer class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+      </footer>
+    </div>
+    <!-- end modal dialogs.. -->
+
+  </body>
+</html>
+

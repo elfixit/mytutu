@@ -1,0 +1,86 @@
+.container header nav ul {
+    list-style: none;
+}
+
+.container header nav ul li {
+    padding-bottom: 10px;
+}
+
+.container header nav .btn-nav {
+    width: 100%;
+}
+
+#todoform {
+    padding-bottom: 30px;
+}
+
+span input.input {
+    width: 100%;
+}
+
+#todo-list {
+	margin: 10px 0;
+	padding: 0;
+	list-style: none;
+    font-weight: bold;
+}
+
+#todo-list label {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+#todo-list li .edit {
+	display: none;
+}
+
+#todo-list li.editing .static {
+    display: none;
+}
+
+#todo-list li.editing .edit {
+    display: block;
+}
+
+#todo-list li.done {
+    text-decoration: line-through;
+}
+
+#todoapp footer {
+	display: none;
+	margin: 0 -20px -20px -20px;
+	overflow: hidden;
+	color: #555555;
+	background: #f4fce8;
+	border-top: 1px solid #ededed;
+	padding: 0 20px;
+	line-height: 37px;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	-ms-border-radius: 0 0 5px 5px;
+	-o-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+}
+
+#clear-completed {
+	float: right;
+	line-height: 20px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	padding: 0 10px 1px;
+	cursor: pointer;
+}
+
+#clear-completed:hover {
+	background: rgba(0, 0, 0, 0.15);
+	-webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+	-moz-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+	-ms-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+	-o-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
+}
+
+#clear-completed:active {
+	position: relative;
+	top: 1px;
+}
